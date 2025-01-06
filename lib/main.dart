@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_awesome_namer/presentation/detail_page.dart';
 import 'package:my_awesome_namer/presentation/favorite_page.dart';
 import 'package:my_awesome_namer/state/app_state.dart';
 import 'package:provider/provider.dart';
@@ -9,27 +11,42 @@ void main() {
   runApp(MyApp());
 }
 
+final GoRouter _router = GoRouter(routes: <RouteBase>[
+  GoRoute(
+    path: '/',
+    builder: (BuildContext context, GoRouterState state) {
+      return ChangeNotifierProvider(
+        create: (context) => MyAppState(),
+        child: (MaterialApp(
+          title: 'Namer App',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: MyHomePage(),
+        )),
+      );
+    },
+  ),
+  GoRoute(
+    path: "/details:name",
+    builder: (BuildContext context, GoRouterState detailState) {
+      return DetailPage(name: detailState.pathParameters["name"]!);
+    },
+  ),
+]);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: (MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: MyHomePage(),
-      )),
+    return MaterialApp.router(
+      routerConfig: _router,
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -83,5 +100,3 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 }
-
-

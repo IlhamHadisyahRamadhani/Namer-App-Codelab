@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_awesome_namer/state/app_state.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +18,13 @@ class FavoritePage extends StatelessWidget {
           padding: EdgeInsets.all(20),
           child: Text("You have ${appState.favorites.length} favorites:"),
         ),
-        for(var pair in appState.favorites)
+        for (var pair in appState.favorites)
           ListTile(
             leading: Icon(Icons.favorite),
             title: Text(pair.asLowerCase),
+            onTap: () {
+              context.go("/details${pair.asLowerCase}");
+            },
           )
       ],
     );
